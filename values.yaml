@@ -1,0 +1,20 @@
+# This document is requirement of Helm Chart.
+# Reference:
+#   https://helm.sh/docs/developing_charts/#templates-and-values
+
+ingress:
+  hosts:
+    - "edelweiss.rushhourgame.net"
+
+persistence:
+  enabled: false
+  storageClass: ""
+  size: "4Gi"
+
+docker-registry:
+  persistence:
+    size: "4Gi"
+  ingress:
+    enabled: true
+    hosts:
+      - "edelweissregistry.rushhourgame.net"

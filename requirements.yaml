@@ -1,0 +1,8 @@
+# This document is requirement of Helm Chart.
+# Reference:
+#   https://helm.sh/docs/developing_charts/#managing-dependencies-with-requirements-yaml
+
+dependencies:
+  - name: "docker-registry"
+    version: 1.8.3
+    repository: "https://kubernetes-charts.storage.googleapis.com/"

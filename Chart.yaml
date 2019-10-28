@@ -1,0 +1,9 @@
+# This document is requirement of Helm Chart.
+# Reference:
+#   https://helm.sh/docs/developing_charts/#the-chart-yaml-file
+
+apiVersion: "v1"
+appVersion: "1.0"
+description: "薄雪人狼のDevOps環境"
+name: "edelweiss-devops"
+version: 0.1.0

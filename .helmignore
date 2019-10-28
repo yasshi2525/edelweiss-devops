@@ -1,0 +1,6 @@
+# This document is requirement of Helm Chart.
+# Reference:
+#   https://helm.sh/docs/developing_charts/#predefined-values
+
+.git/
+.gitignore
