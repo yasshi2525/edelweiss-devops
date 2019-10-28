@@ -4,7 +4,7 @@ metadata:
   name: {{ .Release.Name | quote }}
   namespace: {{ .Release.Namespace | quote }}
   annotations:
-    nginx.ingress.kubernetes.io/proxy-body-size: {{ .Values.ingress.proxy-body-size | quote }}
+    nginx.ingress.kubernetes.io/proxy-body-size: {{ .Values.ingress.body.size | quote }}
 spec:
   rules:
     - host: {{ .Values.ingress.host | quote }}

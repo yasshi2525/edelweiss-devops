@@ -12,7 +12,8 @@ ingress:
       -----BEGIN PRIVATE KEY-----
       -----END PRIVATE KEY-----
   # max image size for docker registry
-  proxy-body-size: "512m"
+  body:
+    size: "512m"
 
 persistence:
   enabled: false
