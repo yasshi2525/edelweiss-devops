@@ -9,6 +9,6 @@ spec:
     - ReadWriteMany
   resources:
     requests:
-      storage: {{ .Values.persistence.storageClass | quote }}
-  storageClassName: {{ .Values.persistence.size | quote }}
+      storage: {{ .Values.persistence.size | quote }}
+  storageClassName: {{ .Values.persistence.storageClass | quote }}
 {{- end -}}
