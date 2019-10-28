@@ -32,7 +32,7 @@ questions:
     default: "edelweissregistry.rushhourgame.net"
     group: "Docker Registry"
 
-  - variable: "docker-registry.secrets.htpasswd_enabled"
+  - variable: ""
     label: "Docker Registryのアクセス制御"
     type: "boolean"
     default: false
