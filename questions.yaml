@@ -42,10 +42,10 @@ questions:
       - label: ".htpasswd"
       - description : |-
           下記コマンドの出力結果を入力してください 
-          `$ htpasswd -Bbn <user> <password>`
+          $ htpasswd -Bbn <user> <password>
           例
-          `$ htpasswd -Bbn admin admin`
-          `admin:$2y$05$rQ6/ojDy2Rwnq3lKMa/O7ORBPxwBQ5UVjpo90aE0kztJj5GqItLwq`
+          $ htpasswd -Bbn admin admin
+          admin:$2y$05$rQ6/ojDy2Rwnq3lKMa/O7ORBPxwBQ5UVjpo90aE0kztJj5GqItLwq
       - default: "admin:$2y$05$rQ6/ojDy2Rwnq3lKMa/O7ORBPxwBQ5UVjpo90aE0kztJj5GqItLwq"
     group: "Docker Registry"
 
