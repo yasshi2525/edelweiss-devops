@@ -32,16 +32,21 @@ questions:
     default: "edelweissregistry.rushhourgame.net"
     group: "Docker Registry"
 
-  - variable: ""
+  - variable: "docker-registry.secrets.htpasswd_enabled"
     label: "Docker Registryのアクセス制御"
     type: "boolean"
     default: false
     show_subquestion_if: true
     subquestions:
       - variable: "docker-registry.secrets.htpasswd"
-      - label: ".htpasswd"
-      - description : "htpasswd -Bbn <user> <password>"
-      - default: "admin:$2y$05$rQ6/ojDy2Rwnq3lKMa/O7ORBPxwBQ5UVjpo90aE0kztJj5GqItLwq"
+        label: ".htpasswd"
+        description : |-
+          下記コマンドの出力結果を入力してください 
+          `$ htpasswd -Bbn <user> <password>`
+          例
+          `$ htpasswd -Bbn admin admin`
+          `admin:$2y$05$rQ6/ojDy2Rwnq3lKMa/O7ORBPxwBQ5UVjpo90aE0kztJj5GqItLwq`
+        default: "admin:$2y$05$rQ6/ojDy2Rwnq3lKMa/O7ORBPxwBQ5UVjpo90aE0kztJj5GqItLwq"
     group: "Docker Registry"
 
   - variable: "docker-registry.persistence.enabled"
