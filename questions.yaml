@@ -3,11 +3,29 @@
 #   https://rancher.com/docs/rancher/v2.x/en/catalog/custom/creating/#questions-yml
 
 questions:
-  - variable: "ingress.hosts[0]"
+  - variable: ingress.host
     label: "薄雪人狼のホスト名"
-    type: "hostname"
+    type: hostname
     required: true
-    default: "edelweiss.rushhourgame.net"
+    default: edelweiss.rushhourgame.net
+    group: "薄雪人狼"
+
+  - variable: ingress.tls.crt
+    label: SSL証明書
+    type: multiline
+    required: true
+    default: |-
+      -----BEGIN CERTIFICATE-----
+      -----END CERTIFICATE-----
+    group: "薄雪人狼"
+
+  - variable: ingress.tls.key
+    label: SSL証明書 秘密鍵
+    type: multiline
+    required: true
+    default: |-
+      -----BEGIN PRIVATE KEY-----
+      -----END PRIVATE KEY-----
     group: "薄雪人狼"
 
   - variable: "persistence.enabled"
@@ -24,39 +42,3 @@ questions:
         type: "string"
         default: "4Gi"
     group: "薄雪人狼"
-
-  - variable: "docker-registry.ingress.hosts[0]"
-    label: "Docker Registryのホスト名"
-    type: "hostname"
-    required: true
-    default: "edelweissregistry.rushhourgame.net"
-    group: "Docker Registry"
-
-  - variable: "docker-registry.secrets.htpasswd_enabled"
-    label: "Docker Registryのアクセス制御"
-    type: "boolean"
-    default: false
-    show_subquestion_if: true
-    subquestions:
-      - variable: "docker-registry.secrets.htpasswd"
-        label: ".htpasswd (デフォルト admin/admin)"
-        type: "string"
-        description : "$ htpasswd -Bbn <user> <password>"
-        default: "admin:$2y$05$rQ6/ojDy2Rwnq3lKMa/O7ORBPxwBQ5UVjpo90aE0kztJj5GqItLwq"
-    group: "Docker Registry"
-
-  - variable: "docker-registry.persistence.enabled"
-    label: "Dockerイメージの永続化"
-    type: "boolean"
-    default: false
-    show_subquestion_if: true
-    subquestions:
-      - variable: "docker-registry.persistence.storageClass"
-        label: "Storage Class"
-        type: "storageclass"
-      - variable: "docker-registry.persistence.size"
-        label: "Size"
-        type: "string"
-        default: "4Gi"
-    group: "Docker Registry"
-

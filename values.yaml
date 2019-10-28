@@ -3,18 +3,18 @@
 #   https://helm.sh/docs/developing_charts/#templates-and-values
 
 ingress:
-  hosts:
-    - "edelweiss.rushhourgame.net"
+  host: "edelweiss.rushhourgame.net"
+  tls:
+    crt: |-
+      -----BEGIN CERTIFICATE-----
+      -----END CERTIFICATE-----
+    key: |-
+      -----BEGIN PRIVATE KEY-----
+      -----END PRIVATE KEY-----
+  # max image size for docker registry
+  proxy-body-size: "512m"
 
 persistence:
   enabled: false
   storageClass: ""
   size: "4Gi"
-
-docker-registry:
-  persistence:
-    size: "4Gi"
-  ingress:
-    enabled: true
-    hosts:
-      - "edelweissregistry.rushhourgame.net"
