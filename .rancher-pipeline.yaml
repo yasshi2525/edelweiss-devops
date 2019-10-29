@@ -3,37 +3,62 @@
 #   https://rancher.com/docs/rancher/v2.x/en/k8s-in-rancher/pipelines
 
 stages:
-- name: Build
-  steps:
-  - runScriptConfig:
-      image: alpine
-      shellScript: |-
-        # Dockerインストール
-        apk update
-        apk --no-cache add git docker openrc
-        service docker start || true
+  - name: ソースコードのclone
+    when:
+      branch: master
+      event: [ push, pull_request ]
+    steps:
+      # php-fpm(Dockerfile)のclone
+      - runScriptConfig:
+          image: alpine
+          shellScript: |-
+            apk update
+            apk --no-cache add git 
+            git clone https://github.com/cranch-crown/edelweiss-docker.git
+            
+            # 19行目で https://getcomposer.org/installer から取得したファイルのハッシュ値をチェックしているが
+            # ハッシュ値が変わったので書き換えている
+            #   https://getcomposer.org/download/
+            sed -i -e "s/48e3236262b34d30969dca3c37281b3b4bbe3221bda826ac6a9a62d6444cdb0dcd0615698a5cbe587c3f0fe57a54d8f5/a5c698ffe4b8e849a443b120cd5ba38043260d5c4023dbf93e1558871f1f07f58274fc6f4c93bcfd858c6bd0775cd8d1/" edelweiss-docker/php-fpm/Dockerfile
 
-        mkdir ci
-        cd ci
-        # php-fpmをDocker化
-        git clone https://github.com/cranch-crown/edelweiss-docker.git
-          # 19行目で https://getcomposer.org/installer から取得したファイルのハッシュ値をチェックしているが
-          # ハッシュ値が変わったので書き換えている
-          #   https://getcomposer.org/download/
-          sed -i -e "s/48e3236262b34d30969dca3c37281b3b4bbe3221bda826ac6a9a62d6444cdb0dcd0615698a5cbe587c3f0fe57a54d8f5/a5c698ffe4b8e849a443b120cd5ba38043260d5c4023dbf93e1558871f1f07f58274fc6f4c93bcfd858c6bd0775cd8d1/" edelweiss-docker/php-fpm/Dockerfile
-        docker build -t php-fpm:latest -f edelweiss-docker/php-fpm/Dockerfile edelweiss-docker/php-fpm
-        
-        # edelweissのLaravel Projectデータを含めたDockerイメージを作る
-        git clone https://github.com/cranch-crown/edelweiss.git
-        
-        cat <<EOS > edelweiss/Dockerfile
-        FROM php-fpm:latest
-        COPY . /var/www/html
-        EOS
-        
-        docker build -t ${REGISTRY_HOST}/edelweiss:latest -f edelweiss/Dockerfile edelweiss
-        docker push ${REGISTRY_HOST}/edelweiss:latest
-    env:
-        REGISTRY_HOST: edelweiss.rushhourgame.net
+      # edelweissのclone  
+      - runScriptConfig:
+          image: alpine
+          shellScript: |-
+            apk update
+            apk --no-cache add git 
+            git clone https://github.com/cranch-crown/edelweiss.git
+            
+            # Laravel Projectデータを含めるDockerfileを作成
+            cat <<EOS > edelweiss/Dockerfile
+            FROM php-fpm:latest
+            COPY . /var/www/html
+            EOS
+
+  # edelweissのDockerイメージを作成するために、php-fpmが必要
+  - name: php-fpm Dockerイメージの作成
+    steps:
+      - publishImageConfig:
+          dockerfilePath: ./edelweiss-docker/php-fpm/Dockerfile
+          buildContext: ./edelweiss-docker/php-fpm
+          tag: php-fpm:latest
+    
+  - name: edelweiss Dockerイメージの作成
+    steps:
+      - publishImageConfig:
+          dockerfilePath: ./edelweiss/Dockerfile
+          buildContext: ./edelweiss
+          tag: edelweiss:latest
+          pushRemote: true
+          registry: edelweiss.rushhourgame.net
+
+  - name: Rancher Chart(Helm Chart)の更新
+    steps:
+      - applyAppConfig:
+          catalogTemplate: edelweiss-devops:edelweiss-devops
+          version: 0.1.0
+          name: edelweiss-devops
+          targetNamespace: edelweiss-devops
+
 timeout: 60
 notification: {}
