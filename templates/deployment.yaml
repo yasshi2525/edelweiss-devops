@@ -23,7 +23,7 @@ spec:
               mountPath: /var/lib/registry/
               subPath: registry
       {{/* 初回インストール時はRegistryが存在しない。Registry構築後に有効化する */}}
-      {{- if .Release.IsUpgrade -}}
+      {{- if .Release.IsUpgrade }}
         - name: edelweiss
           image: {{ .Values.ingress.host }}/edelweiss:latest
           imagePullPolicy: Always
