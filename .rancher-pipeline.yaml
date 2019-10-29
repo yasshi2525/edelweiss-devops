@@ -10,6 +10,8 @@ stages:
       shellScript: |-
         apk update
         apk --no-cache add git docker
+        service docker start
+        
         mkdir ci
         cd ci
         # php-fpmをDocker化
