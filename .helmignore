@@ -2,5 +2,7 @@
 # Reference:
 #   https://helm.sh/docs/developing_charts/#predefined-values
 
+ci
+.rancher-pipeline.yaml
 .git/
 .gitignore
