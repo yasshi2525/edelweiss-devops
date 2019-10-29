@@ -11,7 +11,7 @@ stages:
         # Dockerインストール
         apk update
         apk --no-cache add git docker openrc
-        service docker start
+        service docker start || true
 
         mkdir ci
         cd ci
