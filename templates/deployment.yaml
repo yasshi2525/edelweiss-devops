@@ -22,6 +22,18 @@ spec:
             - name: data
               mountPath: /var/lib/registry/
               subPath: registry
+      {{/* 初回インストール時はRegistryが存在しない。Registry構築後に有効化する */}}
+      {{- if .Release.IsUpgrade -}}
+        - name: edelweiss
+          image: {{ .Values.ingress.host }}/edelweiss:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 9000
+          volumeMounts:
+            - name: data
+              mountPath: /var/www/html/public/storage
+              subPath: edelweiss/storage
+      {{- end }}
       volumes:
         - name: data
         {{- if .Values.persistence.enabled }}
