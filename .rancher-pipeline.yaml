@@ -30,8 +30,7 @@ stages:
             git clone https://github.com/cranch-crown/edelweiss.git
             
             # Laravel Projectデータを含めるDockerfileを作成
-            echo "edelweiss.rushhourgame.net/php-fpm:latest"       >  edelweiss/Dockerfile
-            echo "FROM edelweiss.rushhourgame.net/php-fpm:latest"  >> edelweiss/Dockerfile
+            echo "FROM edelweiss.rushhourgame.net/php-fpm:latest"  >  edelweiss/Dockerfile
             echo "COPY . /var/www/html"                            >> edelweiss/Dockerfile
 
   # edelweissのDockerイメージを作成するために、php-fpmが必要
