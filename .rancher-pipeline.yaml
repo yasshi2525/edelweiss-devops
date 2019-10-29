@@ -8,10 +8,11 @@ stages:
   - runScriptConfig:
       image: alpine
       shellScript: |-
+        # Dockerインストール
         apk update
-        apk --no-cache add git docker
+        apk --no-cache add git docker openrc
         service docker start
-        
+
         mkdir ci
         cd ci
         # php-fpmをDocker化
