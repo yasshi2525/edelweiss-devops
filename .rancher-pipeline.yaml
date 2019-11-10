@@ -4,9 +4,6 @@
 
 stages:
   - name: ソースコードのclone
-    when:
-      branch: master
-      event: [ push, pull_request ]
     steps:
       # php-fpm(Dockerfile)のclone
       - runScriptConfig:
