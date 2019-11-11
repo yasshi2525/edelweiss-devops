@@ -1,12 +1,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Release.Name | quote }}
+  name: {{ include "registry.name" . | quote }}
   namespace: {{ .Release.Namespace | quote }}
 spec:
   type: ClusterIP
   selector:
-    app: {{ .Release.Name | quote }}
+    app: {{ include "registry.name" . | quote }}
   ports:
     - name: {{ include "registry.name" . | quote }}
       port: 5000
