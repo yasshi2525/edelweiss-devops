@@ -1,29 +1,23 @@
+{{/* 初回インストール時はRegistryが存在しない。Registry構築後に有効化する */}}
+{{- if .Release.IsUpgrade }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name | quote }}
+  name: {{ include "app.name" . | quote }}
   namespace: {{ .Release.Namespace | quote }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: {{ .Release.Name | quote }}
+      app: {{ include "app.name" . | quote }}
   template:
     metadata:
       labels:
-        app: {{ .Release.Name | quote }}
+        app: {{ include "app.name" . | quote }}
+      annotations:
+        timestamp: {{ date "2006/01/02T15:04:05" .Release.Time | quote }}
     spec:
       containers:
-        - name: registry
-          image: registry:2
-          ports:
-            - containerPort: 5000
-          volumeMounts:
-            - name: data
-              mountPath: /var/lib/registry/
-              subPath: registry
-      {{/* 初回インストール時はRegistryが存在しない。Registry構築後に有効化する */}}
-      {{- if .Release.IsUpgrade }}
         - name: edelweiss
           image: {{ .Values.ingress.host }}/edelweiss:latest
           imagePullPolicy: Always
@@ -33,12 +27,12 @@ spec:
             - name: data
               mountPath: /var/www/html/public/storage
               subPath: edelweiss/storage
-      {{- end }}
       volumes:
         - name: data
         {{- if .Values.persistence.enabled }}
           persistentVolumeClaim: 
-            claimName: {{ .Release.Name }}-storage-claim
+            claimName: {{ include "storage.claim.name" . | quote }}
         {{- else }}
           emptyDir: {}
         {{- end -}}
+{{- end -}}

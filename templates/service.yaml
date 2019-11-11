@@ -8,5 +8,5 @@ spec:
   selector:
     app: {{ .Release.Name | quote }}
   ports:
-    - name: {{ .Release.Name }}-registry
+    - name: {{ include "registry.name" . | quote }}
       port: 5000
