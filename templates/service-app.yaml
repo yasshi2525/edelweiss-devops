@@ -9,4 +9,4 @@ spec:
     app: {{ include "app.name" . | quote }}
   ports:
     - name: {{ include "app.name" . | quote }}
-      port: 5000
+      port: 9000
